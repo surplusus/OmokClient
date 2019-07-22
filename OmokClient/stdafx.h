@@ -16,6 +16,18 @@
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
-
+#include <iostream>
 
 // 여기서 프로그램에 필요한 추가 헤더를 참조합니다.
+#include "GameBoard.h"
+#include "Basis.h"
+#include "Renderer.h"
+#include "Client.h"
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+#include <WinSock2.h>
+#include <WS2tcpip.h>
+#pragma comment(lib, "ws2_32.lib")
+extern HWND g_hwnd;
+#define WM_ASYNC WM_USER+2
+using std::cout;
+using std::endl;
