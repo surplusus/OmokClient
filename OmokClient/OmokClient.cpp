@@ -13,6 +13,7 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름�
 GameBoard* GB;
 Renderer* RD;
 Client* client;
+HWND g_hwnd;
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -43,7 +44,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_OMOKCLIENT));
     MSG msg;
 	GB = new GameBoard();
-	RD = new Renderer();
+	RD = new Renderer(GB);
 	GB->Init();
 	RD->Init(GB);
 
@@ -143,7 +144,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
 	case WM_ASYNC:
 	{
-		GB->SetReceivedMsg(GB->AccessClient()->Receive());
+		GB->SetReceivedMsg(&(GB->AccessClient()->Receive()));
 		
 	}	break;
     case WM_DESTROY:
@@ -183,7 +184,7 @@ BOOL CALLBACK DialogProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		return 1;
 	case WM_COMMAND:
 	{
-		switch ((LOWORD)wParam)
+		switch (wParam)
 		{
 		case IDC_BUTTON_BLACK:
 		{

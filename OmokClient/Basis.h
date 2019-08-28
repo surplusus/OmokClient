@@ -18,7 +18,7 @@ typedef struct _tagStone {
 	int x = -1;
 	int y = -1;
 	TYPE_COLOR color = TYPE_COLOR::C_NONE;
-	_tagStone(int ix, int iy, TYPE_COLOR icolor) :
+	_tagStone(int ix = -1, int iy = -1, TYPE_COLOR icolor = TYPE_COLOR::C_NONE) :
 		x(ix), y(iy), color(icolor) {}
 }STONE;
 
@@ -28,6 +28,7 @@ typedef struct _tagRMsg
 	int posX = -1;
 	int posY = -1;
 	STONE stone;
+	_tagRMsg(int x = -1, int y = -1, STONE s = STONE());
 } RecvMsg;
 typedef struct _tagSMsg
 {
@@ -42,7 +43,8 @@ static const int BoardStartY = 30;
 static const int BasicPxl = 30;
 static const int CirSize = 13;
 #define WM_CHOOSE WM_USER+3
-
+class GameBoard;
+class Observer;
 class Subject
 {
 public:

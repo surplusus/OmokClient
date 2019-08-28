@@ -1,8 +1,9 @@
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include "stdafx.h"
 #include "Client.h"
 
 Client::Client(const std::string & host, int port) : 
-	host_(host), port_(port), Socket_(-1), isRunning_(true)
+	host_(host), port_(port), socket_(SOCKET(-1)), isRunning_(true)
 {
 }
 
@@ -21,7 +22,7 @@ void Client::Connect()
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port_);
 	inet_pton(AF_INET, host_.c_str(), &addr.sin_addr.S_un.S_addr);
-	WSAAsyncSelect(socket_, g_hwnd, WM_ASYNC, FD_READ);
+	//WSAAsyncSelect(socket_, g_hwnd, WM_ASYNC, FD_READ);
 	if (connect(socket_, (LPSOCKADDR)&addr, sizeof(addr)) == -1)
 		return;
 	else
@@ -45,7 +46,7 @@ bool Client::Send(SendMsg msg)
 
 RecvMsg Client::Receive()
 {
-	RecvMsg* msg;
+	RecvMsg* msg = nullptr;
 	char buffer[512];
 	int msglen = recv(socket_, buffer, sizeof(RecvMsg), 0);
 	memcpy_s(msg, sizeof(RecvMsg), buffer, msglen);

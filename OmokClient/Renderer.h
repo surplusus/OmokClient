@@ -21,7 +21,7 @@ public:
 class Renderer
 {
 public:
-	Renderer() { Init(); }
+	Renderer(GameBoard* gb) { Init(gb); }
 	~Renderer() = default;
 private:
 	GameBoard* GB;

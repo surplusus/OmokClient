@@ -1,9 +1,7 @@
 #pragma once
 #include <vector>
+#include "Basis.h"
 class Subject;
-enum TYPE_EVENT;
-enum TYPE_FLAG;
-enum TYPE_COLOR;
 class Stone;
 class Basis;
 class Client;
@@ -22,7 +20,7 @@ public:
 class GameBoard : public Observer
 {
 public:
-	GameBoard() = default;
+	GameBoard();
 	virtual ~GameBoard() = default;
 
 	virtual void onNotify(const Subject* sub, TYPE_EVENT event);
@@ -32,10 +30,10 @@ public:
 	virtual void Render(HDC &hdc);
 private:
 	Stone* stones_;
-	Client* net_;
+	Client* net_ = nullptr;
 	HDC hdc_;
 	POINT mousePos_;
-	RecvMsg msg_;
+	RecvMsg* msg_;
 	TYPE_COLOR myStone_ = TYPE_COLOR::C_NONE;
 private:
 	void SetMousePos();
@@ -45,8 +43,8 @@ public:
 	POINT GetMousePos() { return mousePos_; }
 	void SetMyStone(TYPE_COLOR color);
 	const TYPE_COLOR GetMyStone() const { return myStone_; }
-	bool CheckConnect() { return net_->isRunning_; }
+	bool CheckConnect();
 	Client* AccessClient() { return net_; }
-	void SetReceivedMsg(RecvMsg m);
+	void SetReceivedMsg(RecvMsg* m);
 };
 

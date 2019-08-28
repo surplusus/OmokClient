@@ -3,6 +3,12 @@
 #include "Basis.h"
 #include "Stone.h"
 #include "Client.h"
+#include "Basis.h"
+
+GameBoard::GameBoard()
+	: Observer(),msg_(nullptr)
+{
+}
 
 void GameBoard::onNotify(const Subject * sub, TYPE_EVENT event)
 {
@@ -60,7 +66,7 @@ void GameBoard::Update()
 {
 	if (!Observer::is_all_initiated)
 		return;
-	if (msg_.flag != TYPE_FLAG::GAME_PLAY)
+	if (msg_->flag != TYPE_FLAG::GAME_PLAY)
 		return;
 	if (myStone_ == TYPE_COLOR::C_NONE)
 		PostMessage(g_hwnd, WM_CHOOSE, 0, 0);
@@ -126,8 +132,8 @@ void GameBoard::RenderBoard(HDC & hdc)
 
 bool GameBoard::ChekeMyTurn()
 {
-	if (msg_.flag == TYPE_FLAG::TURN_BLACK || msg_.flag == TYPE_FLAG::TURN_WHITE)
-		if (msg_.flag == myStone_)
+	if (msg_->flag == TYPE_FLAG::TURN_BLACK || msg_->flag == TYPE_FLAG::TURN_WHITE)
+		if (msg_->flag == myStone_)
 			return true;
 
 	return false;
@@ -138,13 +144,23 @@ void GameBoard::SetMyStone(TYPE_COLOR color)
 	myStone_ = color;
 }
 
-void GameBoard::SetReceivedMsg(RecvMsg m)
+bool GameBoard::CheckConnect()
 {
-	msg_.flag = m.flag;
-	msg_.posX = m.posX;
-	msg_.posY = m.posY;
-	msg_.stone = m.stone;
+	bool result = false;
+	if (net_)
+		result = true;
+	return result;
 }
+
+void GameBoard::SetReceivedMsg(RecvMsg* m)
+{
+	msg_->flag = m->flag;
+	msg_->posX = m->posX;
+	msg_->posY = m->posY;
+	msg_->stone = m->stone;
+}
+
+
 
 void GameBoard::SetMousePos()
 {
